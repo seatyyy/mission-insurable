@@ -1,0 +1,61 @@
+### 200 Madison Avenue, Manhattan, NY Building Report
+
+Info from: https://a810-dobnow.nyc.gov/publish/Index.html#!/
+
+**Property Information:**
+- Address: 200 Madison Avenue, Manhattan, NY 10016
+- BIN: 1017122
+- Block: 865
+- Lot: 14
+- Community Board: 105
+- Landmark Status: Landmark
+- Building Classification: O4-OFFICE BUILDINGS
+**Occupancy Information:**
+- Schedule of Occupancy:
+  - Request Number: SO-1017122-M00912754-P1-01, Status: Approved, Date: 02/25/2025
+  - Request Number: SO-1017122-M00912754-I1-01, Status: Approved, Date: 08/01/2023
+  - Request Number: SO-1017122-121482902-01-03, Status: Approved, Date: 05/30/2023
+  - Request Number: SO-1017122-121482902-01-02, Status: Approved, Date: 03/21/2023
+  - Request Number: SO-1017122-121482902-01-01, Status: Approved, Date: 04/04/2022
+**Compliance Information:**
+- Violations:
+  - Violation of Stop Work Order: Exists
+  - Partial Stop Work Order: Exists
+  - Partial Vacate: Exists
+  - Full Vacate: Exists
+  - Closure Padlock Order: Exists
+  - Class 1 Violation: Exists
+  - Penalties Due: True
+  - Total Violations: 0
+  - Total Active Violations: 0
+  - Total Civil Penalties Due: $0.00
+**Job Filings:**
+- **Job Number:** M08050563I1, **Job Type:** Alteration, **Filing Status:** LOC Issued
+  - Description: INSTALL ONE HAND SINK IN PANTRY ON 7TH FLOOR AS PER PLAN. NO CHANGE IN USE, EGRESS OR OCCUPANCY UNDER THIS APPLICATION.
+
+- **Job Number:** M08047567I1, **Job Type:** Alteration, **Filing Status:** Permit Issued
+  - Description: Charter Meter Project
+
+- **Multiple filings for modifications to sprinkler systems**
+This report includes occupancy, job filings, and compliance details for 200 Madison Ave, Manhattan, NY. Additional specific details such as Building Value, Construction Type, Year Built, and other requested items were not fully attainable from the available data.
+
+
+Info from: https://a810-bisweb.nyc.gov/bisweb/PropertyProfileOverviewServlet?boro=1&houseno=200&street=Madison+Ave&go2=+GO+&requestid=0
+Retrieved comprehensive information about 200 Madison Ave, Manhattan NY. Here's the structured data:
+
+Property Address: 200 Madison Avenue, Manhattan, 10016
+Building Identification Number: 1017122
+Landmark Status: L - LANDMARK
+Building Classification: O4 - OFFICE BUILDINGS
+Current Jobs and Modernization:
+- Interior non-bearing partition updates on the 22nd floor.
+- Fire alarm system modifications on multiple floors.
+- Structural and mechanical updates including a replacement of cooling towers.
+- Installation of HVAC mechanical units.
+
+Construction Features:
+- Several A2 alteration filings indicating ongoing maintenance and modification.
+- Fire protection-focused alterations with no new occupancy.
+
+PDF URLs for Certificates of Occupancy:
+- A total of 37 PDF files were listed for detailed occupancy certificates.
