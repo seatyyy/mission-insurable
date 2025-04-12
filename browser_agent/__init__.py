@@ -108,13 +108,13 @@ async def search(address: str):
     results = []
 
     if not USE_MOCK_DATA:
-        # result = await research_gov_website(address, "https://a810-dobnow.nyc.gov/publish/Index.html#!/", information_retrieval_2_template)
-        # results.append(result)
-        #
-        # result = await research_gov_website(address, "https://a810-bisweb.nyc.gov/bisweb/PropertyProfileOverviewServlet?boro=1&houseno=200&street=Madison+Ave&go2=+GO+&requestid=0", information_retrieval_2_template)
-        # results.append(result)
+        result = await research_gov_website(address, "https://a810-dobnow.nyc.gov/publish/Index.html#!/", information_retrieval_2_template)
+        results.append(result)
 
-        result = await research_gov_website(address,"https://www.propertyshark.com/mason/", information_retrieval_2_template)
+        result = await research_gov_website(address, "https://a810-bisweb.nyc.gov/bisweb/PropertyProfileOverviewServlet?boro=1&houseno=200&street=Madison+Ave&go2=+GO+&requestid=0", information_retrieval_2_template)
+        results.append(result)
+
+        result = await research_gov_website(address,"https://www.propertyshark.com/mason/ny/New-York-City/Property-Search", information_retrieval_2_template)
         results.append(result)
 
         print(results)
@@ -176,7 +176,7 @@ async def run_browser_agent(task: str, controller: Controller):
 
 
 if __name__ == '__main__':
-    address = "200 Madison Ave, Manhattan NY"
+    address = "200 Madison Ave, New York"
     res = asyncio.run(search(address))
     print(res)
 
