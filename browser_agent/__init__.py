@@ -15,8 +15,8 @@ class ResearchedData(BaseModel):
 browser = Browser(
     config=BrowserConfig(
         headless=True,
-        # cdp_url="http://localhost:9222"
-        chrome_instance_path='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',  # macOS path
+        cdp_url="http://localhost:9222"
+        # chrome_instance_path='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',  # macOS path
     )
 )
 llm = ChatOpenAI(model="gpt-4o")
