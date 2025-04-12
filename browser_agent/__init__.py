@@ -37,8 +37,8 @@ class ResearchedData(BaseModel):
 browser = Browser(
     config=BrowserConfig(
         headless=False,
-        cdp_url="http://localhost:9222"
-        # chrome_instance_path='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',  # macOS path
+        # cdp_url="http://localhost:9222"
+        chrome_instance_path='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',  # macOS path
     )
 )
 llm = ChatOpenAI(model="gpt-4o")
@@ -92,8 +92,8 @@ Information that is needed for this address is:
 
 async def research_gov_website(address: str, website: str, retrieval_template: str) -> str:
     task = f"""
-    Research webiste: {website}
-    To find information about address: {address}
+    Open the webiste: {website}
+    Extract information about address: {address}
     {retrieval_template}
     Try to find as much information as possible
     If you see PDF file on the website - do not try to extract information from it, just extract the url of this file.
@@ -108,12 +108,16 @@ async def search(address: str):
     results = []
 
     if not USE_MOCK_DATA:
-        result = await research_gov_website(address, "https://a810-dobnow.nyc.gov/publish/Index.html#!/", information_retrieval_2_template)
+        # result = await research_gov_website(address, "https://a810-dobnow.nyc.gov/publish/Index.html#!/", information_retrieval_2_template)
+        # results.append(result)
+        #
+        # result = await research_gov_website(address, "https://a810-bisweb.nyc.gov/bisweb/PropertyProfileOverviewServlet?boro=1&houseno=200&street=Madison+Ave&go2=+GO+&requestid=0", information_retrieval_2_template)
+        # results.append(result)
+
+        result = await research_gov_website(address,"https://www.propertyshark.com/mason/", information_retrieval_2_template)
         results.append(result)
 
-        result = await research_gov_website(address, "https://a810-bisweb.nyc.gov/bisweb/PropertyProfileOverviewServlet?boro=1&houseno=200&street=Madison+Ave&go2=+GO+&requestid=0", information_retrieval_2_template)
-        results.append(result)
-        print(result)
+        print(results)
 
     return await summarize_info(results)
 
