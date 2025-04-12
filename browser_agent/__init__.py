@@ -12,7 +12,22 @@ load_dotenv(verbose=True)
 
 
 class ResearchedData(BaseModel):
-    pass
+    build_date: Optional[str] = Field(None, description="Date when the building was constructed")
+    bedrooms: Optional[int] = Field(None, description="Number of bedrooms in the property")
+    bathrooms: Optional[float] = Field(None, description="Number of bathrooms in the property")
+    lot_size: Optional[str] = Field(None, description="Size of the property lot")
+    construction_type: Optional[str] = Field(None, description="Type of construction (frame, masonry, fire resistant)")
+    seismic_zone: Optional[bool] = Field(None, description="Whether the property is located in a seismic zone")
+
+    # Original fields from task description can be added here as needed
+    # occupancy_type: Optional[str] = None
+    # building_value: Optional[str] = None
+    # year_built: Optional[str] = None
+    # stories: Optional[int] = None
+    # square_footage: Optional[str] = None
+    # basement: Optional[bool] = None
+    # sprinkler_system: Optional[bool] = None
+    # roof_type: Optional[str] = None
 
 
 browser = Browser(
