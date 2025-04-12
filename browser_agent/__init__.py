@@ -36,9 +36,9 @@ class ResearchedData(BaseModel):
 
 browser = Browser(
     config=BrowserConfig(
-        headless=True,
-        # cdp_url="http://localhost:9222"
-        chrome_instance_path='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',  # macOS path
+        headless=False,
+        cdp_url="http://localhost:9222"
+        # chrome_instance_path='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',  # macOS path
     )
 )
 llm = ChatOpenAI(model="gpt-4o")
@@ -108,10 +108,10 @@ async def search(address: str):
     results = []
 
     if not USE_MOCK_DATA:
-        result = asyncio.run(research_gov_website(address, "https://a810-dobnow.nyc.gov/publish/Index.html#!/", information_retrieval_2_template))
+        result = await research_gov_website(address, "https://a810-dobnow.nyc.gov/publish/Index.html#!/", information_retrieval_2_template)
         results.append(result)
 
-        result = asyncio.run(research_gov_website(address, "https://a810-bisweb.nyc.gov/bisweb/PropertyProfileOverviewServlet?boro=1&houseno=200&street=Madison+Ave&go2=+GO+&requestid=0", information_retrieval_2_template))
+        result = await research_gov_website(address, "https://a810-bisweb.nyc.gov/bisweb/PropertyProfileOverviewServlet?boro=1&houseno=200&street=Madison+Ave&go2=+GO+&requestid=0", information_retrieval_2_template)
         results.append(result)
         print(result)
 
