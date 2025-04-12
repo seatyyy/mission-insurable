@@ -10,7 +10,7 @@ from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
 
 
-load_dotenv(verbose=True)
+load_dotenv(verbose=False)
 
 USE_MOCK_DATA = strtobool(os.environ.get("USE_MOCK_DATA", "True"))
 
@@ -47,7 +47,7 @@ perform the following task
 {task}
 """
 
-information_template = """
+information_retrieval_1_template = """
 Information that is needed for this address is:    
     - Occupancy type (list tenants in comments)	
     - Building  Value
@@ -78,8 +78,10 @@ Information that is needed for this address is:
     - Roof Material
     - Solar Panels
     - Additional Comments on occupancy / updates / unique features /historical register / etc.  (include rent rolls and list of tenants on separate sheet for leased buildings)
-    
-    Additionally, research the following information if not included above:
+    """
+
+information_retrieval_2_template = """
+Information that is needed for this address is:
     - Build date (when was the property constructed)
     - Number of bedrooms and bathrooms
     - Lot size
@@ -88,11 +90,11 @@ Information that is needed for this address is:
 """
 
 
-async def research_gov_website(address: str, website: str):
+async def research_gov_website(address: str, website: str, retrieval_template: str) -> str:
     task = f"""
     Research webiste: {website}
     To find information about address: {address}
-    {information_template}
+    {retrieval_template}
     Try to find as much information as possible
     If you see PDF file on the website - do not try to extract information from it, just extract the url of this file.
     Present the information in a structured format
@@ -106,10 +108,10 @@ async def search(address: str):
     results = []
 
     if not USE_MOCK_DATA:
-        result = asyncio.run(research_gov_website(address, "https://a810-dobnow.nyc.gov/publish/Index.html#!/"))
-        result.append(result)
+        result = asyncio.run(research_gov_website(address, "https://a810-dobnow.nyc.gov/publish/Index.html#!/", information_retrieval_2_template))
+        results.append(result)
 
-        result = asyncio.run(research_gov_website(address, "https://a810-bisweb.nyc.gov/bisweb/PropertyProfileOverviewServlet?boro=1&houseno=200&street=Madison+Ave&go2=+GO+&requestid=0"))
+        result = asyncio.run(research_gov_website(address, "https://a810-bisweb.nyc.gov/bisweb/PropertyProfileOverviewServlet?boro=1&houseno=200&street=Madison+Ave&go2=+GO+&requestid=0", information_retrieval_2_template))
         results.append(result)
         print(result)
 
@@ -119,7 +121,7 @@ async def search(address: str):
 async def general_search(address: str):
     task = f"""    
         Research the information about {address} in different webistes.
-        {information_template}
+        {information_retrieval_1_template}
         Try to find as much information as possible
         Present the information in a structured format
         """
