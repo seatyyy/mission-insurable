@@ -84,7 +84,6 @@ if submit_button:
         with st.spinner("Researching property information..."):
             try:
                 # Run the search function with the user's address
-
                 result = asyncio.run(search(address))
                 print(type(result), result)
 
