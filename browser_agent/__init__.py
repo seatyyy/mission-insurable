@@ -1,6 +1,9 @@
 import asyncio
+from typing import List
+
 from pydantic import BaseModel
-from browser_use import Browser, BrowserConfig, Agent, Controller
+from browser_use import Browser, BrowserConfig, Agent as BrowserAgent, Controller
+from pydantic_ai import Agent
 from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
 
@@ -25,12 +28,8 @@ perform the following task
 {task}
 """
 
-
-async def search(address: str):
-    task = f"""    
-    Research the information about {address} in different webistes.
-    Information that is needed for this address is:
-    
+information_template = """
+Information that is needed for this address is:    
     - Occupancy type (list tenants in comments)	
     - Building  Value
     - Tenant Improvements & Betterments
@@ -60,7 +59,27 @@ async def search(address: str):
     - Roof Material
     - Solar Panels
     - Additional Comments on occupancy / updates / unique features /historical register / etc.  (include rent rolls and list of tenants on separate sheet for leased buildings)
-    
+"""
+
+
+async def research_gov_website(address: str, website: str):
+    task = f"""
+    Research webiste: {website}
+    To find information about address: {address}
+    {information_template}
+    Try to find as much information as possible
+    If you see PDF file on the website - do not try to extract information from it, just extract the url of this file.
+    Present the information in a structured format
+    """
+    controller = Controller()
+    result = await run_browser_agent(task, controller)
+    return result
+
+
+async def search(address: str):
+    task = f"""    
+    Research the information about {address} in different webistes.
+    {information_template}
     Try to find as much information as possible
     Present the information in a structured format
     """
@@ -70,9 +89,13 @@ async def search(address: str):
     return result.model_dump()
 
 
+async def summarize_info(results: List[str]):
+    pass
+
+
 async def run_browser_agent(task: str, controller: Controller):
     """Run the browser-use agent with the specified task."""
-    agent = Agent(
+    agent = BrowserAgent(
         task=task_template.format(task=task),
         browser=browser,
         llm=llm,
@@ -86,4 +109,15 @@ async def run_browser_agent(task: str, controller: Controller):
 
 
 if __name__ == '__main__':
-    asyncio.run(search("200 Madison Ave, Manhattan NY"))
+    address = "200 Madison Ave, Manhattan NY"
+    # asyncio.run(search(address))
+
+    results = []
+    # result = asyncio.run(research_gov_website(address, "https://a810-dobnow.nyc.gov/publish/Index.html#!/"))
+    # result.append(result)
+
+    # result = asyncio.run(research_gov_website(address, "https://a810-bisweb.nyc.gov/bisweb/PropertyProfileOverviewServlet?boro=1&houseno=200&street=Madison+Ave&go2=+GO+&requestid=0"))
+    # results.append(result)
+    # print(result)
+
+
