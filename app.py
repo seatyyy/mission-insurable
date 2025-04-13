@@ -1,5 +1,6 @@
 import streamlit as st
 import asyncio
+from asyncio import sleep
 import hashlib
 
 import email_agent
@@ -7,7 +8,6 @@ from browser_agent import search
 # from browser_agent import ResearchedData
 from vapi import AsyncVapi
 from dotenv import load_dotenv
-import time
 
 load_dotenv(verbose=False)
 
@@ -107,7 +107,7 @@ submit_button = st.button("Submit")
 
 # Function to initiate call after delay
 async def delayed_call(address) -> None:
-    # time.sleep(50)  
+    await sleep(40)
     # Use Streamlit's session state to communicate back to the main thread
     st.session_state.call_initiated = True
     try:
