@@ -15,7 +15,6 @@ load_dotenv(verbose=False)
 USE_MOCK_DATA = strtobool(os.environ.get("USE_MOCK_DATA", "False"))
 DEMO = strtobool(os.environ.get("DEMO", "True"))
 
-
 class ResearchedData(BaseModel):
     build_date: Optional[str] = Field(None, description="Date when the building was constructed")
     bedrooms: Optional[str] = Field(None, description="Number of bedrooms in the property")
@@ -42,7 +41,7 @@ browser = Browser(
         # chrome_instance_path='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',  # macOS path
     )
 )
-llm = ChatOpenAI(model="gpt-4o")
+llm = ChatOpenAI(model="gpt-4o-mini")
 task_template = """
 perform the following task
 {task}
