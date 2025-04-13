@@ -36,7 +36,7 @@ class ResearchedData(BaseModel):
 
 browser = Browser(
     config=BrowserConfig(
-        headless=False,
+        headless=True,
         cdp_url="http://localhost:9222"
         # chrome_instance_path='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',  # macOS path
     )
@@ -106,17 +106,20 @@ async def search(address: str):
 
     if not USE_MOCK_DATA:
 
+        result = await research_gov_website(address, "https://a810-dobnow.nyc.gov/publish/Index.html#!/",
+                                            information_retrieval_2_template)
+        results.append(result)
+
         result = await research_gov_website(address,
-                                            "https://www.propertyshark.com/mason/Property/13364/200-Madison-Ave-New-York-NY-10016/",
+                                            "https://a810-bisweb.nyc.gov/bisweb/PropertyProfileOverviewServlet?boro=1&houseno=200&street=Madison+Ave&go2=+GO+&requestid=0",
                                             information_retrieval_2_template)
         results.append(result)
 
         if not DEMO:
-            result = await research_gov_website(address, "https://a810-dobnow.nyc.gov/publish/Index.html#!/",
-                                                information_retrieval_2_template)
-            results.append(result)
 
-            result = await research_gov_website(address, "https://a810-bisweb.nyc.gov/bisweb/PropertyProfileOverviewServlet?boro=1&houseno=200&street=Madison+Ave&go2=+GO+&requestid=0", information_retrieval_2_template)
+            result = await research_gov_website(address,
+                                                "https://www.propertyshark.com/mason/Property/13364/200-Madison-Ave-New-York-NY-10016/",
+                                                information_retrieval_2_template)
             results.append(result)
     else:
         with open("browser_agent/property_shark_data.md", "r") as file:
