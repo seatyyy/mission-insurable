@@ -12,33 +12,34 @@ from dotenv import load_dotenv
 
 load_dotenv(verbose=False)
 
-USE_MOCK_DATA = strtobool(os.environ.get("USE_MOCK_DATA", "True"))
+USE_MOCK_DATA = strtobool(os.environ.get("USE_MOCK_DATA", "False"))
+DEMO = strtobool(os.environ.get("DEMO", "True"))
 
 
 class ResearchedData(BaseModel):
     build_date: Optional[str] = Field(None, description="Date when the building was constructed")
-    bedrooms: Optional[int] = Field(None, description="Number of bedrooms in the property")
-    bathrooms: Optional[float] = Field(None, description="Number of bathrooms in the property")
+    bedrooms: Optional[str] = Field(None, description="Number of bedrooms in the property")
+    bathrooms: Optional[str] = Field(None, description="Number of bathrooms in the property")
+    stories: Optional[str] = Field(None, description="Number of stories in the property")
     lot_size: Optional[str] = Field(None, description="Size of the property lot")
     construction_type: Optional[str] = Field(None, description="Type of construction (frame, masonry, fire resistant)")
     seismic_zone: Optional[bool] = Field(None, description="Whether the property is located in a seismic zone")
 
     # Original fields from task description can be added here as needed
-    # occupancy_type: Optional[str] = None
-    # building_value: Optional[str] = None
-    # year_built: Optional[str] = None
-    # stories: Optional[int] = None
-    # square_footage: Optional[str] = None
-    # basement: Optional[bool] = None
-    # sprinkler_system: Optional[bool] = None
-    # roof_type: Optional[str] = None
+    occupancy_type: Optional[str] = None
+    building_value: Optional[str] = None
+    year_built: Optional[str] = None
+    square_footage: Optional[str] = None
+    basement: Optional[bool] = None
+    sprinkler_system: Optional[bool] = None
+    roof_type: Optional[str] = None
 
 
 browser = Browser(
     config=BrowserConfig(
         headless=False,
-        # cdp_url="http://localhost:9222"
-        chrome_instance_path='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',  # macOS path
+        cdp_url="http://localhost:9222"
+        # chrome_instance_path='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',  # macOS path
     )
 )
 llm = ChatOpenAI(model="gpt-4o")
@@ -81,12 +82,9 @@ Information that is needed for this address is:
     """
 
 information_retrieval_2_template = """
-Information that is needed for this address is:
-    - Build date (when was the property constructed)
-    - Number of bedrooms and bathrooms
-    - Lot size
-    - Construction type (specifically whether it's frame, masonry, or fire resistant)
-    - Is the address in a seismic zone (areas prone to earthquakes)
+Extract all useful information about property
+Everything that you can extract about address, lot, construction, sales, zoning, area and not limited to that.
+Extract everything you can extract about property
 """
 
 
@@ -97,7 +95,7 @@ async def research_gov_website(address: str, website: str, retrieval_template: s
     {retrieval_template}
     Try to find as much information as possible
     If you see PDF file on the website - do not try to extract information from it, just extract the url of this file.
-    Present the information in a structured format
+    Return all information that you have extracted in on big json
     """
     controller = Controller()
     result = await run_browser_agent(task, controller)
@@ -108,18 +106,38 @@ async def search(address: str):
     results = []
 
     if not USE_MOCK_DATA:
-        result = await research_gov_website(address, "https://a810-dobnow.nyc.gov/publish/Index.html#!/", information_retrieval_2_template)
+
+        result = await research_gov_website(address,
+                                            "https://www.propertyshark.com/mason/Property/13364/200-Madison-Ave-New-York-NY-10016/",
+                                            information_retrieval_2_template)
         results.append(result)
 
-        result = await research_gov_website(address, "https://a810-bisweb.nyc.gov/bisweb/PropertyProfileOverviewServlet?boro=1&houseno=200&street=Madison+Ave&go2=+GO+&requestid=0", information_retrieval_2_template)
-        results.append(result)
+        if not DEMO:
+            result = await research_gov_website(address, "https://a810-dobnow.nyc.gov/publish/Index.html#!/",
+                                                information_retrieval_2_template)
+            results.append(result)
 
-        result = await research_gov_website(address,"https://www.propertyshark.com/mason/ny/New-York-City/Property-Search", information_retrieval_2_template)
-        results.append(result)
+            result = await research_gov_website(address, "https://a810-bisweb.nyc.gov/bisweb/PropertyProfileOverviewServlet?boro=1&houseno=200&street=Madison+Ave&go2=+GO+&requestid=0", information_retrieval_2_template)
+            results.append(result)
+    else:
+        with open("browser_agent/property_shark_data.md", "r") as file:
+            results.append(file.read())
+        with open(f"browser_agent/nyc.gov.txt", "r") as file:
+            results.append(file.read())
 
-        print(results)
+    if DEMO:
+        return ResearchedData(
+            build_date="1926",
+            bedrooms="NA",
+            bathrooms="NA",
+            lot_size="197.5 ft x 220 ft",
+            construction_type="Office Only with or without Commercial - 20 Stories or More (O4)",
+            seismic_zone=False,
+            stories="20"
+        )
 
     return await summarize_info(results)
+
 
 
 async def general_search(address: str):
@@ -136,17 +154,6 @@ async def general_search(address: str):
 
 
 async def summarize_info(results: List[str]):
-
-    if USE_MOCK_DATA:
-        return ResearchedData(
-            build_date="1990",
-            bedrooms=1,
-            bathrooms=1,
-            lot_size="2000 sq. ft",
-            construction_type="frame",
-            seismic_zone=False,
-        )
-
     agent = Agent(
         'openai:gpt-4o',
         result_type=ResearchedData,
@@ -171,8 +178,13 @@ async def run_browser_agent(task: str, controller: Controller):
 
     result = await agent.run()
     await browser.close()
-    result = result.final_result()
-    return result
+    # final_result = result.final_result()
+    final_result = ""
+    for item in result.history:
+        for res in item.result:
+            final_result += "\n" + res.extracted_content
+
+    return final_result
 
 
 if __name__ == '__main__':
