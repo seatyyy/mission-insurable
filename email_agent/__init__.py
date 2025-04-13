@@ -1,4 +1,5 @@
 import base64
+from functools import reduce
 
 import imapclient
 import pyzmail
@@ -75,8 +76,10 @@ def extract_info_from_email(filepath: str):
         ],
     )
 
-    print(message.content)
-    return message.content
+    result =  "\n".join([block.text for block in message.content])
+    print(result)
+
+    return result
 
 
 if __name__ == '__main__':
