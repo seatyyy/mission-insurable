@@ -105,17 +105,20 @@ async def search(address: str):
     results = []
 
     if not USE_MOCK_DATA:
-
-        result = await research_gov_website(address, "https://a810-dobnow.nyc.gov/publish/Index.html#!/",
-                                            information_retrieval_2_template)
-        results.append(result)
-
-        result = await research_gov_website(address,
-                                            "https://a810-bisweb.nyc.gov/bisweb/PropertyProfileOverviewServlet?boro=1&houseno=200&street=Madison+Ave&go2=+GO+&requestid=0",
+        result = await research_gov_website(address, "https://a810-bisweb.nyc.gov/bisweb/bispi00.jsp",
                                             information_retrieval_2_template)
         results.append(result)
 
         if not DEMO:
+
+            result = await research_gov_website(address, "https://a810-dobnow.nyc.gov/publish/Index.html#!/",
+                                                information_retrieval_2_template)
+            results.append(result)
+
+            result = await research_gov_website(address,
+                                                "https://a810-bisweb.nyc.gov/bisweb/PropertyProfileOverviewServlet?boro=1&houseno=200&street=Madison+Ave&go2=+GO+&requestid=0",
+                                                information_retrieval_2_template)
+            results.append(result)
 
             result = await research_gov_website(address,
                                                 "https://www.propertyshark.com/mason/Property/13364/200-Madison-Ave-New-York-NY-10016/",
