@@ -1,6 +1,8 @@
 import streamlit as st
 import asyncio
 import hashlib
+
+import email_agent
 from browser_agent import search
 # from browser_agent import ResearchedData
 from vapi import AsyncVapi
@@ -236,4 +238,8 @@ if submit_button:
             except Exception as e:
                 st.error(f"An error occurred during the search: {str(e)}")
     else:
-        st.error("Please enter an address before submitting.") 
+        st.error("Please enter an address before submitting.")
+
+if st.button("Refresh email inbox"):
+    result = email_agent.fetch_attachments()
+    st.markdown(result)

@@ -44,7 +44,7 @@ def fetch_attachments():
                         with open(filepath, 'wb') as f:
                             f.write(part.get_payload())
                         print(f"Saved attachment: {filepath}")
-                        extract_info_from_email(filepath)
+                        return extract_info_from_email(filepath)
 
 def extract_info_from_email(filepath: str):
     client = anthropic.Anthropic()
