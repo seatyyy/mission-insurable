@@ -7,6 +7,7 @@ from browser_agent import search
 # from browser_agent import ResearchedData
 from vapi import AsyncVapi
 from dotenv import load_dotenv
+import time
 
 load_dotenv(verbose=False)
 
@@ -106,7 +107,7 @@ submit_button = st.button("Submit")
 
 # Function to initiate call after delay
 async def delayed_call(address) -> None:
-    # time.sleep(10)  # Wait for 10 seconds
+    time.sleep(50)  
     # Use Streamlit's session state to communicate back to the main thread
     st.session_state.call_initiated = True
     try:
@@ -120,9 +121,9 @@ async def delayed_call(address) -> None:
             }
         }
         await client.calls.create(assistant_id='df76006e-1fba-41d9-abcd-3042252af2a6', 
-                            phone_number_id='49743da8-04b9-4cd7-8ba7-925e2f73d397',
+                            phone_number_id='cd43f0bb-6f17-40fd-9099-e060955c5ce0',
                             assistant_overrides=assistant_overrides,
-                            customer={"number":"+12065864136"})
+                            customer={"number":"+16504712165"})
         
         # Add a notification in the UI
         st.success("📞 Call initiated!")
