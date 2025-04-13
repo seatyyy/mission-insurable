@@ -4,7 +4,9 @@ import hashlib
 from browser_agent import search
 # from browser_agent import ResearchedData
 from vapi import AsyncVapi
+from dotenv import load_dotenv
 
+load_dotenv(verbose=False)
 
 # A dictionary to store ongoing tasks
 tasks = {}
