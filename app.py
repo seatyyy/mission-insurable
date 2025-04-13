@@ -4,9 +4,14 @@ import threading
 import time
 from browser_agent import search
 from browser_agent import ResearchedData
+from vapi import AsyncVapi, Vapi
 
-# Import Vapi SDK
-from vapi_python import Vapi
+
+try:
+    loop = asyncio.get_running_loop()
+except RuntimeError:
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
 
 # Set page configuration
 st.set_page_config(
@@ -82,34 +87,31 @@ if submit_button:
         call_initiated = False
 
         # Function to initiate call after delay
-        def delayed_call():
+        async def delayed_call() -> None:
             # time.sleep(10)  # Wait for 10 seconds
             # Use Streamlit's session state to communicate back to the main thread
-            print("==========================calling==========================")
             st.session_state.call_initiated = True
             try:
-                # Get your API key from Streamlit secrets or environment variables
-                # api_key = st.secrets.get("VAPI_API_KEY", "demo-api-key")
-                api_key = "7588d55e-1d23-470e-a9cd-b60c68b93eb2"
-                print("========api_key=======", api_key)
-                # Initialize Vapi client
-                vapi = Vapi(api_key=api_key)
-
+                client = AsyncVapi(
+                    token='6c778c6d-e70e-4d52-879d-df8f349fe915'
+                )
                 assistant_overrides = {
                     "recordingEnabled": False,
                     "variableValues": {
                         "address": address
                     }
                 }
-
-                # Start the call
-                vapi.start(assistant_id='3a75217f-a6f9-49aa-bbaa-8800163062f9', assistant_overrides=assistant_overrides)
+                await client.calls.create(assistant_id='3a75217f-a6f9-49aa-bbaa-8800163062f9', 
+                                    phone_number_id='9adf1cef-4c5e-4fb2-953b-425ce8172d16',
+                                    assistant_overrides=assistant_overrides,
+                                    customer={"number":"+12065864136"})
                 
                 # Add a notification in the UI
-                st.success("📞 Call initiated! Please answer your phone.")
+                st.success("📞 Call initiated!")
                 
             except Exception as e:
                 st.error(f"Error initiating call: {str(e)}")
+
 
         # Display the results in a modern format
         st.markdown('<div class="property-card">', unsafe_allow_html=True)
@@ -118,7 +120,7 @@ if submit_button:
         # Show a spinner while processing
         with st.spinner("Researching property information..."):
             try:
-                # # Run the search function with the user's address
+                # Run the search function with the user's address
                 result = asyncio.run(search(address))
 
                 # Build date
@@ -180,37 +182,7 @@ if submit_button:
                 
                 st.markdown('</div>', unsafe_allow_html=True)
 
-                                
-                # Start the delayed call in a separate thread
-                call_thread = threading.Thread(target=delayed_call)
-                call_thread.daemon = True
-                call_thread.start()
-                
-                # # Manual call button
-                # st.markdown(
-                #     '<div class="call-container">'
-                #     '<button class="call-button" onclick="startCall()" title="Call an agent">'
-                #     '📞'
-                #     '</button>'
-                #     '</div>',
-                #     unsafe_allow_html=True
-                # )
-                
-                # Add JavaScript to handle the button click
-                # st.markdown(
-                #     """
-                #     <script>
-                #     function startCall() {
-                #         // Use Streamlit's event mechanism to trigger Python function
-                #         window.parent.postMessage({
-                #             type: "streamlit:custom",
-                #             action: "startCall"
-                #         }, "*");
-                #     }
-                #     </script>
-                #     """,
-                #     unsafe_allow_html=True
-                # )
+                asyncio.run(delayed_call())
                 
             except Exception as e:
                 st.error(f"An error occurred during the search: {str(e)}")

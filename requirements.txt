@@ -120,3 +120,4 @@ wrapt==1.17.2
 zipp==3.21.0
 zstandard==0.23.0
 vapi_python
+vapi_server_sdk
