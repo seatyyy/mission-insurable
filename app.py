@@ -107,7 +107,7 @@ async def delayed_call(address) -> None:
     st.session_state.call_initiated = True
     try:
         client = AsyncVapi(
-            token='6c778c6d-e70e-4d52-879d-df8f349fe915'
+            token='a86305fd-10c1-47f9-ade2-22e382f90507'
         )
         assistant_overrides = {
             "recordingEnabled": False,
@@ -115,10 +115,10 @@ async def delayed_call(address) -> None:
                 "address": address
             }
         }
-        await client.calls.create(assistant_id='3a75217f-a6f9-49aa-bbaa-8800163062f9', 
-                            phone_number_id='cc4e6968-f1af-49dd-ba78-b165cf5296c4',
+        await client.calls.create(assistant_id='df76006e-1fba-41d9-abcd-3042252af2a6', 
+                            phone_number_id='49743da8-04b9-4cd7-8ba7-925e2f73d397',
                             assistant_overrides=assistant_overrides,
-                            customer={"number":"+16504712165"})
+                            customer={"number":"+12065864136"})
         
         # Add a notification in the UI
         st.success("📞 Call initiated!")
