@@ -107,7 +107,7 @@ submit_button = st.button("Submit")
 
 # Function to initiate call after delay
 async def delayed_call(address) -> None:
-    time.sleep(50)  
+    # time.sleep(50)  
     # Use Streamlit's session state to communicate back to the main thread
     st.session_state.call_initiated = True
     try:
